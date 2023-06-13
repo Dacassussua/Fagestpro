@@ -1,0 +1,24 @@
+name: FagestProduction
+on:
+    push:
+        branches: [main]
+jobs:
+    deploy-to-github-pages:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup .NET Core SDK
+              uses: actions/setup-dotnet@v1
+              with:
+                  dotnet-version: 6.x
+                  include-prerelease: true
+                  
+            - name: Add DevExpress
+              run: dotnet nuget add source https://nuget.devexpress.com/c1T5lKEk4aNqKHFmGc3dhRvEeOX4eeFwyLsoTBtLEJOK4l7nkP/api
+                        
+            - name: copy index.html to 404.html
+              run: cp release/wwwroot/index.html release/wwwroot/404.html
+  
+            - name: Publish
+              run: dotnet publish --configuration Release --output ./publish
