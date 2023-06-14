@@ -13,9 +13,17 @@ jobs:
               with:
                   dotnet-version: 6.x
                   include-prerelease: true
-                  
             - name: Add DevExpress
               run: dotnet nuget add source https://nuget.devexpress.com/c1T5lKEk4aNqKHFmGc3dhRvEeOX4eeFwyLsoTBtLEJOK4l7nkP/api
-                        
+                  
+            - name: Add DevExpresspackages
+              run: dotnet add FagestKeyGenerator.WebAPP.csproj package DevExpress.Blazor -v 22.2.6
+      
+            - name: Publish .NET Core Project
+              run: dotnet publish FagestKeyGenerator.WebAPP.csproj -c Release -o release --nologo
+
+            - name: copy index.html to 404.html
+              run: cp release/wwwroot/index.html release/wwwroot/404.html
+  
             - name: Publish
               run: dotnet publish --configuration Release --output ./publish
